@@ -1,4 +1,6 @@
 test.py
+.DS_Store
+settings.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
