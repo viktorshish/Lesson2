@@ -12,59 +12,34 @@
   бота отвечать, в каком созвездии сегодня находится планета.
 
 """
+from datetime import datetime
 import logging
-import datetime
 import settings
 import ephem
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
-                    level=logging.INFO)
+# format='%(name)s - %(levelname)s - %(message)s'
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def greet_user(update, context):
     logger.info('Вызван /Start')
-    update.message.reply_text('Здравствуй, пользователь! Введите команду: /planet [Название планеты на английском языке]')
+    update.message.reply_text('Здравствуй, пользователь! Введите команду: /planet и название планеты английскими буквами. Пример: /planet mars')
 
 def planet_in_the_constellation(update, context):
-    planet = update.message.text.split()[1].lower()
-    if planet == 'mercury':
-        mercury = ephem.Mercury(datetime.datetime.now())
-        constellation = ephem.constellation(mercury)
-    elif planet == 'venus':
-        venus = ephem.Venus(datetime.datetime.now())
-        constellation = ephem.constellation(venus)
-    elif planet == 'jupiter':
-        jupiter = ephem.Jupiter(datetime.datetime.now())
-        constellation = ephem.constellation(jupiter)
-    elif planet == 'saturn':
-        saturn = ephem.Saturn(datetime.datetime.now())
-        constellation = ephem.constellation(saturn)
-    elif planet == 'uranus':
-        uranus = ephem.Uranus(datetime.datetime.now())
-        constellation = ephem.constellation(uranus)
-    elif planet == 'neptune':
-        neptune = ephem.Neptune(datetime.datetime.now())
-        constellation = ephem.constellation(neptune)
-
-
+    planet_user = update.message.text.split()[1].capitalize()
+    logger.info(f'Выбрана планета: {planet_user}')
+    list_planets = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluton']
+    if planet_user in list_planets:
+        planet = getattr(ephem, planet_user)(datetime.now())
+        constellation = ephem.constellation(planet)
+        date_now = datetime.now().strftime('%Y-%m-%d')
+        update.message.reply_text(f'На текщий день: {date_now} - планета {planet_user} находдится в созведии {constellation}')
+        logger.info(f'Расчет произведен и отправлен пользователю  - {planet} - {constellation}')
     else:
-        print('Ничего не выбрано')
-
-    print(f'На текущее время: {datetime.datetime.now()} - планета {planet.capitalize()} находдится в созведии {constellation}')
-
-    # print('Ничего не выбрано')
-# def talk_to_me(update, context):
-#     text = update.message.text.split()[1]
-#     if text =='mars':
-#         mars = ephem.Mars(datetime.today())
-#         constellation = ephem.constellation(mars)
-#     else:
-#         logger.info(f'Ничего не выбрано')
-#         update.message.reply_text('Ничего не выбрано')
-#     logger.info(f'Выбрана планета: {text}')
-#     update.message.reply_text(f'Выбрана планета: {text} - Находится в созвездии {constellation}')
+        update.message.reply_text('Такой планеты не существует, введите команду правильно')
+        logger.info('Расчет не произведен, ошибочно задана планета')
 
 def main():
     mybot = Updater(settings.API_KEY, use_context=True)
