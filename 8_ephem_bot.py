@@ -19,13 +19,13 @@ import ephem
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
-# format='%(name)s - %(levelname)s - %(message)s'
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def greet_user(update, context):
     logger.info('Вызван /Start')
     update.message.reply_text('Здравствуй, пользователь! Введите команду: /planet и название планеты английскими буквами. Пример: /planet mars')
+    update.message.reply_text('Планеты: Mercury - Venus - Mars - Jupiter - Saturn - Uranus - Neptune - Pluton')
 
 def planet_in_the_constellation(update, context):
     planet_user = update.message.text.split()[1].capitalize()
@@ -48,7 +48,6 @@ def main():
     dp.add_handler(CommandHandler('start', greet_user))
     dp.add_handler(CommandHandler('planet', planet_in_the_constellation))
     dp.add_handler(MessageHandler(Filters.text, planet_in_the_constellation))
-
 
     logger.info('Бот запущен')
     mybot.start_polling()
