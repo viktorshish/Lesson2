@@ -47,4 +47,3 @@ if __name__ == "__main__":
     print(discounted("five", 5))
     print(discounted("сто", "десять"))
     print(discounted(100.0, 5, [1, 2, 3]))
-
