@@ -17,10 +17,11 @@ def discounted(price, discount, max_discount=20):
     try:
         price = abs(float(price))
         discount = abs(float(discount))
-        max_discount = abs(int(max_discount))
-    except(ValueError):
+    except ValueError:
         print('Неправильное значение переменной')
-    except(TypeError):
+    try:
+        max_discount = abs(int(max_discount))
+    except TypeError:
         print('Неправильный тип переменных')
 
     try:
