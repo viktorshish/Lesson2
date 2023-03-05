@@ -31,7 +31,7 @@ def discounted(price, discount, max_discount=20):
             return price
         else:
             return price - (price * discount / 100)
-    except(TypeError):
+    except TypeError:
         print('Неправильный тип переменных')
 
 if __name__ == "__main__":
