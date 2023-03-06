@@ -20,20 +20,25 @@ def discounted(price, discount, max_discount=20):
         max_discount = abs(int(max_discount))
     except ValueError:
         print('Неправильное значение переменной')
-    # except TypeError:
-    #     print('Неправильный тип переменной')
-    if max_discount >= 100:
-        raise ValueError("Слишком большая максимальная скидка")
-    if discount >= max_discount:
-        return price
-    else:
-        return price - (price * discount / 100)
+    except TypeError:
+        print('Неправильный тип данных')
+
+    try:
+        if max_discount >= 100:
+            raise ValueError("Слишком большая максимальная скидка")
+        if discount >= max_discount:
+            return price
+        else:
+            return price - (price * discount / 100)
+    except TypeError:
+        print('Неправильный тип')
 
 
 if __name__ == "__main__":
+
     print(discounted(1, 2))
     print(discounted(100, "3"))
     print(discounted("100", "4.5"))
     print(discounted("five", 5))
-    print(discounted("сто", "десять"))
-    print(discounted(100.0, 5, "101"))
+    print(discounted("сто", [1,2], "десять"))
+    print(discounted(100.0, 5))
